@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# firebase プロジェクトの設定
+- Authentication を開始して、 mail と google を有効にする
+- Cloud Firestore を開始する
 
-## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# `.env.local`
+- json ファイルを環境変数に設定するときは、key を`""` で囲んで、[改行を削除](https://www.textfixer.com/tools/remove-line-breaks.php)
+## `NEXTAUTH_SECRET`
+```shell
+openssl rand -base64 32
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```ts
+export const authOptions:NextAuthOptions ={
+  ...,
+  secret: process.env.NEXTAUTH_SECRET,
+}
+```
+## `NEXT_PUBLIC_FIREBASE_CONFIG`
+- firebase SDK で使用
+- console から `firebaseConfig`を取得
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## `NEXT_FIREBASE_SERVICE_ACCOUNT_KEY`
+- firebase Admin SDK　で使用
+- サービスアカウント > `新しい秘密鍵を生成`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## `NEXT_PUBLIC_ADMIN_UID`
+- admin の uid を設定
+- `SetAdminButton`を押して、`NEXT_PUBLIC_ADMIN_UID`の`Custom Claim` に `Admin` を設定する
 
-## Learn More
+# error??
+- 2023/9/19 firebase auth のログインエラーが`auth/invalid-login-credentials` のみ
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# deploy
+## `Firebase: Error (auth/unauthorized-domain).`がでた場合
+- firebase console Authentication 承認済みドメインに`anonymous-login.vercel.app`を追加
+- `NEXTAUTH_URL`は`http://localhost:3000`のままでも正常動作
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# anonymousについて
+firestore に`read, write if true`（誰でも書き込めるルール）を設定すると警告がでる
+しかし、firebase Admin SDK を使うと、管理者からの操作なので、ルールに束縛されない
+Server Actions からのデータ操作は firebase Admin SDK を使う
+つまり、Server Actions からの操作はルールに束縛されない
+anonyomus ログインを使う必要がない
 
-## Deploy on Vercel
+# primary color について
+shadcn で primary color が設定されているので、
+アプリで使うメインテーマは`tailwind.config.ts`に`main`として登録
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# server component での pathname 取得について
+middleware で取得できる
+https://github.com/vercel/next.js/issues/43704#issuecomment-1411186664
+ただし、ページ毎に呼び出す必要がある
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Mockup Photo
+-  [unsplash](https://source.unsplash.com/random)
+
+# firebase エミュレータ
+```zsh
+# fish ではエラーになるので、 zsh を選ぶ
+zsh
+
+# 設定で Firestore, Emulators を選ぶ
+firebase init
+# Emulators Setup で Auth, Firestore を選ぶ
+```
+
+## 1. エミュレータへの接続
+### a. Admin SDK firestore
+環境変数に`FIRESTORE_EMULATOR_HOST`を設定
+### b. Admin SDK auth
+環境変数に`FIREBASE_AUTH_EMULATOR_HOST`を設定
+### c. SDK auth
+```js
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+const isDev = process.env.NODE_ENV === "development";
+if (isDev) {
+  connectAuthEmulator(authClient, "http://127.0.0.1:9099");
+}
+```
+
+## 2. エミュレータの立ち上げ
+```zsh
+firebase emulators:start
+```
+
+## 3. user 登録
+エミュレーターでユーザー登録
+`Custom Claim`
+```json
+{"admin":true}
+```
+
+# 🔌 tRPC
+|Pros & Cons | |
+|-|-|
+|🙆|ページの更新が不要<br/>クライアントサイドで`Admin SDK`が使える |
+|🙅|描画毎に通信|
+
+
+⛳ `search params` とサーバーサイド `fetch` で対応すれば大抵は解決<br/>ページ更新が頻繁すぎる場合は、`tRPC` を使う
+
+# useFormStatus
+`react-dom` の `18.2.13` ではエラー
+```
+dependencies:
++ react 18.2.0
++ react-dom 18.2.0
+
+devDependencies:
+- @types/react 18.2.28
++ @types/react 18.2.21 (18.2.28 is available)
+- @types/react-dom 18.2.13
++ @types/react-dom 18.2.7 (18.2.13 is available)
+```
