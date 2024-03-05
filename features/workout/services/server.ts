@@ -40,5 +40,7 @@ export async function getWorkoutRecords() {
     records.push(record);
   });
 
-  return records;
+  const sorted = records.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return sorted;
 }
