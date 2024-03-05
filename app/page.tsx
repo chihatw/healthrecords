@@ -1,31 +1,54 @@
-import { auth } from '@/auth';
-import { Todo, TodoForm, TodoList } from '@/features/todos';
-import { dbAdmin } from '@/firebase/admin';
-import { COLLECTIONS } from '@/firebase/constants';
+import DairyBpms from '@/features/workout/components/graph/DairyBpms';
+import DailyCalories from '@/features/workout/components/graph/DairyCalories';
+import DailyDistances from '@/features/workout/components/graph/DairyDistances';
+import DailyPaceAvgs from '@/features/workout/components/graph/DairyPaceAvgs';
+import DailyTemperature from '@/features/workout/components/graph/DairyTemperature';
+import DailyWakeup from '@/features/workout/components/graph/DairyWakeup';
+import DailyWorkouts from '@/features/workout/components/graph/DairyWorkouts';
+import { RECORDS } from '@/features/workout/constants';
+import {
+  buildDailyBpms,
+  buildDailyCalories,
+  buildDailyDistances,
+  buildDailyPaceAvgs,
+  buildDailyTemps,
+  buildDailyWakeup,
+  buildDailyWorkouts,
+} from '@/features/workout/services/utils';
 
 export default async function Home() {
-  const session = await auth();
-  const uid = session?.user?.id || '';
-
-  const snapshot = await dbAdmin
-    .collection(COLLECTIONS.todos)
-    .where('uid', '==', uid)
-    .get();
-  const todos: Todo[] = [];
-
-  snapshot.forEach((doc) => {
-    const { title, uid } = doc.data();
-    const todo: Todo = { id: doc.id, title, uid };
-    todos.push(todo);
-  });
+  const dailyBpms = buildDailyBpms(RECORDS);
+  const dailyCalories = buildDailyCalories(RECORDS);
+  const dailyTemps = buildDailyTemps(RECORDS);
+  const dailyWakeups = buildDailyWakeup(RECORDS);
+  const dailyDistances = buildDailyDistances(RECORDS);
+  const dailyWorkouts = buildDailyWorkouts(RECORDS);
+  const dailyPaceAvgs = buildDailyPaceAvgs(RECORDS);
   return (
-    <main className='mx-auto w-full  max-w-md space-y-4 pb-40 pt-10'>
-      <div className='grid  place-items-center gap-y-8 '>
-        <div className='w-full max-w-sm space-y-6'>
-          <TodoList todos={todos} />
-          <TodoForm />
-        </div>
-      </div>
+    <main className='mx-auto w-full  max-w-lg space-y-10 pb-40 pt-10'>
+      <DailyWorkouts
+        data={dailyWorkouts}
+        label='運動内訳'
+        dataLabel={[
+          'VO₂ max',
+          '無酸素運動',
+          '有酸素運動',
+          'インテンシブ',
+          'ライト',
+          'リラックス',
+        ]}
+      />
+      {/* <DailyDurations label='運動時間' data={dailyDuraions} /> */}
+      <DailyPaceAvgs label='平均ペース' data={dailyPaceAvgs} />
+      <DairyBpms
+        data={dailyBpms}
+        label='BPM'
+        dataLabels={['最大BPM', '平均BPM']}
+      />
+      <DailyDistances data={dailyDistances} label='距離' />
+      <DailyCalories data={dailyCalories} label='消費カロリー' />
+      <DailyWakeup data={dailyWakeups} label='起床時間' />
+      <DailyTemperature data={dailyTemps} label='気温' />
     </main>
   );
 }

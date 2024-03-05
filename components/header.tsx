@@ -1,29 +1,35 @@
 import { auth, signOut as signOutNextAuth } from '@/auth';
 import { authClient } from '@/firebase/client';
 import { signOut as signOutFirebase } from 'firebase/auth';
-import { DoorClosed, DoorOpen, Home, ShieldCheck } from 'lucide-react';
+import {
+  Database,
+  DoorClosed,
+  DoorOpen,
+  Home,
+  ShieldCheck,
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
 
-const items: { url: string; label: string }[] = [];
+const items: { url: string; label: string }[] = [
+  { url: '/raw', label: 'data' },
+];
 
 const Header = async () => {
   return (
     <nav className='grid h-12 shadow '>
       <div className='container flex w-full items-center justify-between  mx-auto'>
         <HomeIcon />
-        <div className='flex grow justify-between'>
-          {items.map((item, index) => (
-            <Link
-              key={index}
-              href={item.url}
-              className={buttonVariants({ variant: 'ghost' })}
-            >
-              {item.label}
-            </Link>
-          ))}
+
+        <div className='flex items-center gap-4'>
+          <Link
+            href={'/raw'}
+            className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+          >
+            <Database />
+          </Link>
+          <AuthPane />
         </div>
-        <AuthPane />
       </div>
     </nav>
   );
