@@ -33,4 +33,7 @@ export interface RecordFormState {
   relax: string;
   disabled: boolean;
   errMsg: string;
+  y: number;
+  m: number;
+  d: number;
 }

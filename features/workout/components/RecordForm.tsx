@@ -26,6 +26,9 @@ const INITIAL_STATE: RecordFormState = {
   relax: '',
   disabled: true,
   errMsg: '',
+  y: new Date().getFullYear(),
+  m: new Date().getMonth() + 1,
+  d: new Date().getDate(),
 };
 
 const RecordForm = (props: Props) => {
