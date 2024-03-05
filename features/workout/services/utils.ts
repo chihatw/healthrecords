@@ -1,4 +1,8 @@
-import { WorkoutRecord } from '../schema';
+import {
+  RecordFormState,
+  WorkoutRecord,
+  WorkoutRecord_createRecord,
+} from '../schema';
 
 export function convertSixtyToTen(minutes: number, seconds: number) {
   return minutes * 60 + seconds;
@@ -11,6 +15,57 @@ export function convertTenToSixty(_seconds: number): {
   let minutes = Math.floor(_seconds / 60);
   let seconds = _seconds % 60;
   return { minutes, seconds };
+}
+
+export function convertStringToSixtyString(input: string) {
+  if (!input.length || input.length > 4) return null;
+
+  if (input.split('').some((i) => isNaN(i as unknown as number))) return null;
+
+  let minutes = Number(input.at(-1));
+  if (input.at(-2)) {
+    minutes = minutes + Number(input.at(-2)) * 10;
+  }
+
+  let hours = 0;
+  if (input.at(-3)) {
+    hours = Number(input.at(-3));
+  }
+  if (input.at(-4)) {
+    hours = hours + Number(input.at(-4)) * 10;
+  }
+
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+  return `${hours}:${minutes.toString().padStart(2, '0')}`;
+}
+
+export function convertStringToSixty(input: string): {
+  hours: number;
+  minutes: number;
+} {
+  if (!input.length || input.length > 4) return { hours: 0, minutes: 0 };
+
+  if (input.split('').some((i) => isNaN(i as unknown as number)))
+    return { hours: 0, minutes: 0 };
+
+  let minutes = Number(input.at(-1));
+  if (input.at(-2)) {
+    minutes = minutes + Number(input.at(-2)) * 10;
+  }
+
+  let hours = 0;
+  if (input.at(-3)) {
+    hours = Number(input.at(-3));
+  }
+  if (input.at(-4)) {
+    hours = hours + Number(input.at(-4)) * 10;
+  }
+
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59)
+    return { hours: 0, minutes: 0 };
+
+  return { hours, minutes };
 }
 
 export function buildDailyTemps(records: WorkoutRecord[]): [Date, number][] {
@@ -107,4 +162,53 @@ export function buildDailyPaceAvgs(records: WorkoutRecord[]): [Date, number][] {
     return [record.date, duration / 60 / (record.distance / 1000)];
   });
   return data;
+}
+
+export function checkRecordFormDisabled(state: RecordFormState) {
+  let disabled = false;
+  if (
+    !state.distance ||
+    !state.calories ||
+    !state.bpm_avg ||
+    !state.bpm_max ||
+    !convertStringToSixtyString(state.wakeup) ||
+    !convertStringToSixtyString(state.vo2_max) ||
+    !convertStringToSixtyString(state.anaerobic) ||
+    !convertStringToSixtyString(state.aerobic) ||
+    !convertStringToSixtyString(state.intensive) ||
+    !convertStringToSixtyString(state.light) ||
+    !convertStringToSixtyString(state.relax)
+  ) {
+    disabled = true;
+  }
+  return disabled;
+}
+
+export function buildWorkoutRecord_createRecord(state: RecordFormState) {
+  const wakeup = convertStringToSixty(state.wakeup);
+  const vo2_max = convertStringToSixty(state.vo2_max);
+  const anaerobic = convertStringToSixty(state.anaerobic);
+  const aerobic = convertStringToSixty(state.aerobic);
+  const intensive = convertStringToSixty(state.intensive);
+  const light = convertStringToSixty(state.light);
+  const relax = convertStringToSixty(state.relax);
+
+  const date = new Date();
+
+  const recode: WorkoutRecord_createRecord = {
+    temperature: state.temperature,
+    wakeup: [wakeup.hours, wakeup.minutes],
+    distance: state.distance,
+    calories: state.calories,
+    bpm_avg: state.bpm_avg,
+    bpm_max: state.bpm_max,
+    vo2_max: [vo2_max.hours, vo2_max.minutes],
+    anaerobic: [anaerobic.hours, anaerobic.minutes],
+    aerobic: [aerobic.hours, aerobic.minutes],
+    intensive: [intensive.hours, intensive.minutes],
+    light: [light.hours, light.minutes],
+    relax: [relax.hours, relax.hours],
+    date: [date.getFullYear(), date.getMonth() + 1, date.getDate()],
+  };
+  return recode;
 }

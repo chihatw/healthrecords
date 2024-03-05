@@ -1,33 +1,16 @@
 import { auth, signOut as signOutNextAuth } from '@/auth';
 import { authClient } from '@/firebase/client';
 import { signOut as signOutFirebase } from 'firebase/auth';
-import {
-  Database,
-  DoorClosed,
-  DoorOpen,
-  Home,
-  ShieldCheck,
-} from 'lucide-react';
+import { Database, DoorClosed, DoorOpen, Home } from 'lucide-react';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
-
-const items: { url: string; label: string }[] = [
-  { url: '/raw', label: 'data' },
-];
 
 const Header = async () => {
   return (
     <nav className='grid h-12 shadow '>
       <div className='container flex w-full items-center justify-between  mx-auto'>
         <HomeIcon />
-
         <div className='flex items-center gap-4'>
-          <Link
-            href={'/raw'}
-            className={buttonVariants({ variant: 'ghost', size: 'icon' })}
-          >
-            <Database />
-          </Link>
           <AuthPane />
         </div>
       </div>
@@ -51,7 +34,6 @@ const HomeIcon = () => {
 const AuthPane = async () => {
   const session = await auth();
   const uid = session?.user?.id || '';
-  const isAdmin = false;
 
   const action = async () => {
     'use server';
@@ -60,7 +42,12 @@ const AuthPane = async () => {
   };
   return (
     <div className='flex items-center gap-x-2'>
-      {isAdmin && <ShieldCheck />}
+      <Link
+        href={'/raw'}
+        className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+      >
+        <Database />
+      </Link>
       {!!uid ? (
         <form action={action}>
           <Button type='submit' variant='ghost' size='icon'>

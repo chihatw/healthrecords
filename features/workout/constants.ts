@@ -1,6 +1,6 @@
 import { WorkoutRecord } from './schema';
 
-export const RECORDS: WorkoutRecord[] = [
+export const RECORDS: Omit<WorkoutRecord, 'id'>[] = [
   {
     temperature: 6,
     wakeup: [5, 0], // timeofday https://developers.google.com/chart/interactive/docs/datesandtimes#working-with-timeofday

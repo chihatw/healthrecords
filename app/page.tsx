@@ -5,7 +5,7 @@ import DailyPaceAvgs from '@/features/workout/components/graph/DairyPaceAvgs';
 import DailyTemperature from '@/features/workout/components/graph/DairyTemperature';
 import DailyWakeup from '@/features/workout/components/graph/DairyWakeup';
 import DailyWorkouts from '@/features/workout/components/graph/DairyWorkouts';
-import { RECORDS } from '@/features/workout/constants';
+import { getWorkoutRecords } from '@/features/workout/services/server';
 import {
   buildDailyBpms,
   buildDailyCalories,
@@ -17,13 +17,18 @@ import {
 } from '@/features/workout/services/utils';
 
 export default async function Home() {
-  const dailyBpms = buildDailyBpms(RECORDS);
-  const dailyCalories = buildDailyCalories(RECORDS);
-  const dailyTemps = buildDailyTemps(RECORDS);
-  const dailyWakeups = buildDailyWakeup(RECORDS);
-  const dailyDistances = buildDailyDistances(RECORDS);
-  const dailyWorkouts = buildDailyWorkouts(RECORDS);
-  const dailyPaceAvgs = buildDailyPaceAvgs(RECORDS);
+  const records = await getWorkoutRecords();
+
+  const dailyBpms = buildDailyBpms(records);
+  const dailyCalories = buildDailyCalories(records);
+  const dailyTemps = buildDailyTemps(records);
+  const dailyWakeups = buildDailyWakeup(records);
+  const dailyDistances = buildDailyDistances(records);
+  const dailyWorkouts = buildDailyWorkouts(records);
+  const dailyPaceAvgs = buildDailyPaceAvgs(records);
+
+  if (!records.length) return <></>;
+
   return (
     <main className='mx-auto w-full  max-w-lg space-y-10 pb-40 pt-10'>
       <DailyWorkouts

@@ -1,4 +1,5 @@
 export interface WorkoutRecord {
+  id: string;
   temperature: number;
   wakeup: [number, number]; // [h, m]
   distance: number; // m
@@ -12,4 +13,24 @@ export interface WorkoutRecord {
   light: [number, number]; //[m,s]
   relax: [number, number]; //[m,s]
   date: Date;
+}
+export type WorkoutRecord_createRecord = Omit<WorkoutRecord, 'id' | 'date'> & {
+  date: [number, number, number];
+};
+
+export interface RecordFormState {
+  temperature: number;
+  wakeup: string;
+  distance: number;
+  calories: number;
+  bpm_avg: number;
+  bpm_max: number;
+  vo2_max: string;
+  anaerobic: string;
+  aerobic: string;
+  intensive: string;
+  light: string;
+  relax: string;
+  disabled: boolean;
+  errMsg: string;
 }
