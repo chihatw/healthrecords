@@ -11,7 +11,10 @@ const RecordList = ({ records }: Props) => {
   const [optimisticRecords, removeRecord] = useOptimistic<
     WorkoutRecord[],
     string
-  >(records, (state, id) => state.filter((record) => record.id !== id));
+  >(
+    records.sort((a, b) => b.date.getTime() - a.date.getTime()),
+    (state, id) => state.filter((record) => record.id !== id)
+  );
 
   const action = async (id: string) => {
     removeRecord(id);
