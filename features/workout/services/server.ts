@@ -1,6 +1,7 @@
 import { dbAdmin } from '@/firebase/admin';
 import { COLLECTIONS } from '@/firebase/constants';
 import { WorkoutRecord } from '../schema';
+import { serializeDateArray } from './utils';
 
 export async function getWorkoutRecords() {
   const snapshot = await dbAdmin.collection(COLLECTIONS.records).get();
@@ -45,8 +46,4 @@ export async function getWorkoutRecords() {
   );
 
   return sorted;
-}
-
-export function serializeDateArray(array: [number, number, number]): number {
-  return array[0] * 1000 + array[1] * 100 + array[2];
 }

@@ -4,7 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { useOptimistic } from 'react';
 import { WorkoutRecord } from '../schema';
 import { removeWorkoutRecord } from '../services/actions';
-import { serializeDateArray } from '../services/server';
+import { serializeDateArray } from '../services/utils';
 
 type Props = { records: WorkoutRecord[] };
 

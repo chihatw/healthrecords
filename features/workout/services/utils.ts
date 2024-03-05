@@ -236,3 +236,7 @@ export function buildDateData(array: any[]): any[] {
     return [new Date(`${date[0]}/${date[1]}/${date[2]}`), ...other];
   });
 }
+
+export function serializeDateArray(array: [number, number, number]): number {
+  return array[0] * 1000 + array[1] * 100 + array[2];
+}
