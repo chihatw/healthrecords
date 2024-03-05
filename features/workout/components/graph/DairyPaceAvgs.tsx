@@ -1,9 +1,10 @@
 'use client';
 import Chart from 'react-google-charts';
+import { buildDateData } from '../../services/utils';
 
 type Props = {
   label: string;
-  data: [Date, number][];
+  data: [[number, number, number], number][];
 };
 
 const DairyPaceAvgs = ({ label, data }: Props) => {
@@ -17,7 +18,7 @@ const DairyPaceAvgs = ({ label, data }: Props) => {
         vAxis: { title: '1km毎ペース（分）' },
         legend: { position: 'none' },
       }}
-      data={[['日付', label], ...data]}
+      data={[['日付', label], ...buildDateData(data)]}
     />
   );
 };

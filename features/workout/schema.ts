@@ -12,7 +12,7 @@ export interface WorkoutRecord {
   intensive: [number, number]; //[m,s]
   light: [number, number]; //[m,s]
   relax: [number, number]; //[m,s]
-  date: Date;
+  date: [number, number, number]; // [y,m,d]
 }
 export type WorkoutRecord_createRecord = Omit<WorkoutRecord, 'id' | 'date'> & {
   date: [number, number, number];

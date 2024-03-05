@@ -68,8 +68,10 @@ export function convertStringToSixty(input: string): {
   return { hours, minutes };
 }
 
-export function buildDailyTemps(records: WorkoutRecord[]): [Date, number][] {
-  const data: [Date, number][] = records.map((record) => [
+export function buildDailyTemps(
+  records: WorkoutRecord[]
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => [
     record.date,
     record.temperature,
   ]);
@@ -79,18 +81,16 @@ export function buildDailyTemps(records: WorkoutRecord[]): [Date, number][] {
 
 export function buildDailyWakeup(
   records: WorkoutRecord[]
-): [Date, [number, number, number]][] {
-  const data: [Date, [number, number, number]][] = records.map((record) => [
-    record.date,
-    [...record.wakeup, 0],
-  ]);
+): [[number, number, number], [number, number, number]][] {
+  const data: [[number, number, number], [number, number, number]][] =
+    records.map((record) => [record.date, [...record.wakeup, 0]]);
   return data;
 }
 
 export function buildDailyDistances(
   records: WorkoutRecord[]
-): [Date, number][] {
-  const data: [Date, number][] = records.map((record) => [
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => [
     record.date,
     record.distance,
   ]);
@@ -98,8 +98,10 @@ export function buildDailyDistances(
   return data;
 }
 
-export function buildDailyCalories(records: WorkoutRecord[]): [Date, number][] {
-  const data: [Date, number][] = records.map((record) => [
+export function buildDailyCalories(
+  records: WorkoutRecord[]
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => [
     record.date,
     record.calories,
   ]);
@@ -109,35 +111,48 @@ export function buildDailyCalories(records: WorkoutRecord[]): [Date, number][] {
 
 export function buildDailyBpms(
   records: WorkoutRecord[]
-): [Date, number, number][] {
-  const date: [Date, number, number][] = records.map((record) => [
-    record.date,
-    record.bpm_max,
-    record.bpm_avg,
-  ]);
+): [[number, number, number], number, number][] {
+  const date: [[number, number, number], number, number][] = records.map(
+    (record) => [record.date, record.bpm_max, record.bpm_avg]
+  );
   return date;
 }
 
 export function buildDailyWorkouts(
   records: WorkoutRecord[]
-): [Date, number, number, number, number, number, number][] {
-  const data: [Date, number, number, number, number, number, number][] =
-    records.map((record) => [
-      record.date,
-      convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!),
-      convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!),
-      convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!),
-      convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!),
-      convertSixtyToTen(record.light.at(0)!, record.light.at(1)!),
-      convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!),
-    ]);
+): [
+  [number, number, number],
+  number,
+  number,
+  number,
+  number,
+  number,
+  number
+][] {
+  const data: [
+    [number, number, number],
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ][] = records.map((record) => [
+    record.date,
+    convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!),
+    convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!),
+    convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!),
+    convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!),
+    convertSixtyToTen(record.light.at(0)!, record.light.at(1)!),
+    convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!),
+  ]);
   return data;
 }
 
 export function buildDailyDurations(
   records: WorkoutRecord[]
-): [Date, number][] {
-  const data: [Date, number][] = records.map((record) => {
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => {
     const duration =
       convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) +
       convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) +
@@ -150,8 +165,10 @@ export function buildDailyDurations(
   return data;
 }
 
-export function buildDailyPaceAvgs(records: WorkoutRecord[]): [Date, number][] {
-  const data: [Date, number][] = records.map((record) => {
+export function buildDailyPaceAvgs(
+  records: WorkoutRecord[]
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => {
     const duration =
       convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) +
       convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) +
@@ -211,4 +228,11 @@ export function buildWorkoutRecord_createRecord(state: RecordFormState) {
     date: [date.getFullYear(), date.getMonth() + 1, date.getDate()],
   };
   return recode;
+}
+
+export function buildDateData(array: any[]): any[] {
+  return array.map((item) => {
+    const [date, ...other] = item;
+    return [new Date(`${date[0]}/${date[1]}/${date[2]}`), ...other];
+  });
 }

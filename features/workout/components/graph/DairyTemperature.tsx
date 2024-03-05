@@ -1,13 +1,14 @@
 'use client';
 
 import { Chart } from 'react-google-charts';
+import { buildDateData } from '../../services/utils';
 
 const DailyTemperature = ({
   label,
   data,
 }: {
   label: string;
-  data: [Date, number][];
+  data: [[number, number, number], number][];
 }) => {
   return (
     <Chart
@@ -18,7 +19,7 @@ const DailyTemperature = ({
         hAxis: { format: 'M/d' },
         legend: { position: 'none' },
       }}
-      data={[['日付', label], ...data]}
+      data={[['日付', label], ...buildDateData(data)]}
     />
   );
 };

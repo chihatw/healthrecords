@@ -35,12 +35,18 @@ export async function getWorkoutRecords() {
       intensive,
       light,
       relax,
-      date: new Date(`${date[0]}/${date[1]}/${date[2]}`),
+      date,
     };
     records.push(record);
   });
 
-  const sorted = records.sort((a, b) => a.date.getTime() - b.date.getTime());
+  const sorted = records.sort(
+    (a, b) => serializeDateArray(a.date) - serializeDateArray(b.date)
+  );
 
   return sorted;
+}
+
+export function serializeDateArray(array: [number, number, number]): number {
+  return array[0] * 1000 + array[1] * 100 + array[2];
 }

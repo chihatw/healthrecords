@@ -1,11 +1,20 @@
 'use client';
 
 import Chart from 'react-google-charts';
+import { buildDateData } from '../../services/utils';
 
 type Props = {
   label: string;
   dataLabel: string[];
-  data: [Date, number, number, number, number, number, number][];
+  data: [
+    [number, number, number],
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ][];
 };
 
 const DairyWorkouts = ({ data, label, dataLabel }: Props) => {
@@ -20,7 +29,7 @@ const DairyWorkouts = ({ data, label, dataLabel }: Props) => {
         hAxis: { format: 'M/d' },
         vAxis: { title: '累計時間（秒）' },
       }}
-      data={[['日付', ...dataLabel], ...data]}
+      data={[['日付', ...dataLabel], ...buildDateData(data)]}
     />
   );
 };

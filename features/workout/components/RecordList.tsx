@@ -4,6 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { useOptimistic } from 'react';
 import { WorkoutRecord } from '../schema';
 import { removeWorkoutRecord } from '../services/actions';
+import { serializeDateArray } from '../services/server';
 
 type Props = { records: WorkoutRecord[] };
 
@@ -12,7 +13,9 @@ const RecordList = ({ records }: Props) => {
     WorkoutRecord[],
     string
   >(
-    records.sort((a, b) => b.date.getTime() - a.date.getTime()),
+    records.sort(
+      (a, b) => serializeDateArray(b.date) - serializeDateArray(a.date)
+    ),
     (state, id) => state.filter((record) => record.id !== id)
   );
 
@@ -29,9 +32,7 @@ const RecordList = ({ records }: Props) => {
           className='grid grid-cols-[1fr,auto] items-center bg-white/60 rounded pl-4 pr-2'
         >
           <div className='text-sm'>
-            {`${record.date.getFullYear()}/${
-              record.date.getMonth() + 1
-            }/${record.date.getDate()}`}
+            {`${record.date[0]}/${record.date[1]}/${record.date[2]}`}
           </div>
           <form action={() => action(record.id)}>
             <Button variant={'ghost'} size={'icon'} type='submit'>
