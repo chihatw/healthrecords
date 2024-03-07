@@ -3,7 +3,9 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const serviceAccountKey = process.env.NEXT_FIREBASE_SERVICE_ACCOUNT_KEY!;
-const cleaned = serviceAccountKey.replace(/[\u0000-\u001F]+/g, '');
+const cleaned = serviceAccountKey
+  .replace(/[\u0000-\u001F]+/g, '')
+  .replace(/\\n/g, '\n');
 const serviceAccount = JSON.parse(cleaned);
 
 // https://github.com/nodejs/help/issues/4115
