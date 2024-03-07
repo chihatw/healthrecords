@@ -1,9 +1,11 @@
 import { getApps, initializeApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
-const firebaseConfig = JSON.parse(
-  process.env.NEXT_PUBLIC_FIREBASE_CONFIG as string
-);
+const firebase_config = process.env.NEXT_PUBLIC_FIREBASE_CONFIG!;
+
+const cleaned = firebase_config.split(String.raw`\n`).join('\n');
+
+const firebaseConfig = JSON.parse(cleaned);
 
 // Initialize Firebase
 const app = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig);

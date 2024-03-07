@@ -16,6 +16,7 @@ export interface WorkoutRecord {
 }
 export type WorkoutRecord_createRecord = Omit<WorkoutRecord, 'id' | 'date'> & {
   date: [number, number, number];
+  createdAt: number;
 };
 
 export interface RecordFormState {

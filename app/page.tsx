@@ -33,7 +33,7 @@ export default async function Home() {
     <main className='mx-auto w-full  max-w-lg space-y-10 pb-40 pt-10'>
       <DailyWorkouts
         data={dailyWorkouts}
-        label='運動内訳'
+        label='運動強度'
         dataLabel={[
           'VO₂ max',
           '無酸素運動',

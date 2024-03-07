@@ -9,6 +9,7 @@ import { buildWorkoutRecord_createRecord } from './utils';
 export async function addWorkoutRecord(
   state: RecordFormState
 ): Promise<string> {
+  console.log('@@');
   const record = buildWorkoutRecord_createRecord(state);
   try {
     await dbAdmin.collection(COLLECTIONS.records).add(record);

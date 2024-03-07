@@ -210,6 +210,7 @@ export function buildWorkoutRecord_createRecord(state: RecordFormState) {
   const light = convertStringToSixty(state.light);
   const relax = convertStringToSixty(state.relax);
 
+  const createdAt = Date.now();
   const recode: WorkoutRecord_createRecord = {
     temperature: state.temperature,
     wakeup: [wakeup.hours, wakeup.minutes],
@@ -224,6 +225,7 @@ export function buildWorkoutRecord_createRecord(state: RecordFormState) {
     light: [light.hours, light.minutes],
     relax: [relax.hours, relax.hours],
     date: [state.y, state.m, state.d],
+    createdAt,
   };
   return recode;
 }
