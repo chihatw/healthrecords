@@ -62,7 +62,7 @@ export function convertStringToSixty(input: string): {
     hours = hours + Number(input.at(-4)) * 10;
   }
 
-  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59)
+  if (hours < 0 || hours > 59 || minutes < 0 || minutes > 59)
     return { hours: 0, minutes: 0 };
 
   return { hours, minutes };
