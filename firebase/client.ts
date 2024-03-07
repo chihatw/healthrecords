@@ -3,9 +3,7 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
 const firebase_config = process.env.NEXT_PUBLIC_FIREBASE_CONFIG!;
 
-const cleaned = firebase_config.split(String.raw`\n`).join('\n');
-
-const firebaseConfig = JSON.parse(cleaned);
+const firebaseConfig = JSON.parse(firebase_config);
 
 // Initialize Firebase
 const app = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig);
