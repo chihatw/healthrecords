@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { RecordFormState } from '../schema';
 import {
   convertSixtyToTen,
-  convertStringToSixty,
   convertStringToSixtyString,
   convertTenToSixty,
 } from '../services/utils';
@@ -20,9 +19,9 @@ const RecordFormMonitor = ({ state }: Props) => {
       state.intensive,
       state.light,
       state.relax,
-    ].forEach((input: string) => {
-      const { hours, minutes } = convertStringToSixty(input);
-      const time = convertSixtyToTen(hours, minutes);
+    ].forEach((input: number) => {
+      const { minutes, seconds } = convertTenToSixty(input);
+      const time = convertSixtyToTen(minutes, seconds);
       duration = duration + time;
     });
     const { minutes, seconds } = convertTenToSixty(duration);

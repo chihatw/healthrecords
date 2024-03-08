@@ -5,7 +5,7 @@ import { Database, DoorClosed, DoorOpen, Home } from 'lucide-react';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
 
-const Header = async () => {
+const Header = () => {
   return (
     <nav className='grid h-12 shadow '>
       <div className='container flex w-full items-center justify-between  mx-auto'>

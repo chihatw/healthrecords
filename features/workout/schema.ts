@@ -21,17 +21,17 @@ export type WorkoutRecord_createRecord = Omit<WorkoutRecord, 'id' | 'date'> & {
 
 export interface RecordFormState {
   temperature: number;
-  wakeup: string;
+  wakeup: number;
   distance: number;
   calories: number;
   bpm_avg: number;
   bpm_max: number;
-  vo2_max: string;
-  anaerobic: string;
-  aerobic: string;
-  intensive: string;
-  light: string;
-  relax: string;
+  vo2_max: number;
+  anaerobic: number;
+  aerobic: number;
+  intensive: number;
+  light: number;
+  relax: number;
   disabled: boolean;
   errMsg: string;
   y: number;

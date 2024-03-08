@@ -13,17 +13,17 @@ type Props = {};
 
 const INITIAL_STATE: RecordFormState = {
   temperature: 0,
-  wakeup: '',
+  wakeup: 0,
   distance: 0,
   calories: 0,
   bpm_avg: 0,
   bpm_max: 0,
-  vo2_max: '',
-  anaerobic: '',
-  aerobic: '',
-  intensive: '',
-  light: '',
-  relax: '',
+  vo2_max: 0,
+  anaerobic: 0,
+  aerobic: 0,
+  intensive: 0,
+  light: 0,
+  relax: 0,
   disabled: true,
   errMsg: '',
   y: new Date().getFullYear(),
@@ -69,11 +69,11 @@ const RecordForm = (props: Props) => {
         <InputWrapper label='起床時間'>
           <Input
             placeholder='wake up'
-            type='text'
+            type='number'
             value={state.wakeup}
             onChange={(e) =>
               setState((prev) => {
-                const updated = { ...prev, wakeup: e.target.value };
+                const updated = { ...prev, wakeup: Number(e.target.value) };
                 const disabled = checkRecordFormDisabled(updated);
                 return { ...updated, disabled, errMsg: '' };
               })
@@ -99,8 +99,8 @@ const RecordForm = (props: Props) => {
         <InputWrapper label='消費カロリー'>
           <Input
             placeholder='calories'
-            type='number'
             min={0}
+            type='number'
             value={state.calories}
             onChange={(e) =>
               setState((prev) => {
@@ -114,8 +114,8 @@ const RecordForm = (props: Props) => {
         <InputWrapper label='BPM (avg)'>
           <Input
             placeholder='BPM (avg)'
-            type='number'
             min={0}
+            type='number'
             value={state.bpm_avg}
             onChange={(e) =>
               setState((prev) => {
@@ -129,8 +129,8 @@ const RecordForm = (props: Props) => {
         <InputWrapper label='BPM (max)'>
           <Input
             placeholder='BPM (max)'
-            type='number'
             min={0}
+            type='number'
             value={state.bpm_max}
             onChange={(e) =>
               setState((prev) => {
@@ -145,11 +145,12 @@ const RecordForm = (props: Props) => {
       <div className='grid grid-cols-4 gap-2'>
         <Input
           placeholder='VO₂ max'
-          type='text'
+          min={0}
+          type='number'
           value={state.vo2_max}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, vo2_max: e.target.value };
+              const updated = { ...prev, vo2_max: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })
@@ -157,11 +158,12 @@ const RecordForm = (props: Props) => {
         />
         <Input
           placeholder='anaerobic'
-          type='text'
+          min={0}
+          type='number'
           value={state.anaerobic}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, anaerobic: e.target.value };
+              const updated = { ...prev, anaerobic: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })
@@ -169,11 +171,12 @@ const RecordForm = (props: Props) => {
         />
         <Input
           placeholder='aerobic'
-          type='text'
+          min={0}
+          type='number'
           value={state.aerobic}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, aerobic: e.target.value };
+              const updated = { ...prev, aerobic: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })
@@ -181,11 +184,12 @@ const RecordForm = (props: Props) => {
         />
         <Input
           placeholder='intensive'
-          type='text'
+          min={0}
+          type='number'
           value={state.intensive}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, intensive: e.target.value };
+              const updated = { ...prev, intensive: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })
@@ -193,11 +197,12 @@ const RecordForm = (props: Props) => {
         />
         <Input
           placeholder='light'
-          type='text'
+          min={0}
+          type='number'
           value={state.light}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, light: e.target.value };
+              const updated = { ...prev, light: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })
@@ -205,11 +210,12 @@ const RecordForm = (props: Props) => {
         />
         <Input
           placeholder='relax'
-          type='text'
+          min={0}
+          type='number'
           value={state.relax}
           onChange={(e) =>
             setState((prev) => {
-              const updated = { ...prev, relax: e.target.value };
+              const updated = { ...prev, relax: Number(e.target.value) };
               const disabled = checkRecordFormDisabled(updated);
               return { ...updated, disabled, errMsg: '' };
             })

@@ -17,55 +17,25 @@ export function convertTenToSixty(_seconds: number): {
   return { minutes, seconds };
 }
 
-export function convertStringToSixtyString(input: string) {
-  if (!input.length || input.length > 4) return null;
+export function convertStringToSixtyString(input: number) {
+  if (input < 0) return null;
 
-  if (input.split('').some((i) => isNaN(i as unknown as number))) return null;
-
-  let minutes = Number(input.at(-1));
-  if (input.at(-2)) {
-    minutes = minutes + Number(input.at(-2)) * 10;
+  let minutes = Number(input.toString().at(-1));
+  if (input.toString().at(-2)) {
+    minutes = minutes + Number(input.toString().at(-2)) * 10;
   }
 
   let hours = 0;
-  if (input.at(-3)) {
-    hours = Number(input.at(-3));
+  if (input.toString().at(-3)) {
+    hours = Number(input.toString().at(-3));
   }
-  if (input.at(-4)) {
-    hours = hours + Number(input.at(-4)) * 10;
+  if (input.toString().at(-4)) {
+    hours = hours + Number(input.toString().at(-4)) * 10;
   }
 
-  if (hours < 0 || hours > 59 || minutes < 0 || minutes > 59) return null;
+  if (hours < 0 || minutes < 0 || minutes > 59) return null;
 
   return `${hours}:${minutes.toString().padStart(2, '0')}`;
-}
-
-export function convertStringToSixty(input: string): {
-  hours: number;
-  minutes: number;
-} {
-  if (!input.length || input.length > 4) return { hours: 0, minutes: 0 };
-
-  if (input.split('').some((i) => isNaN(i as unknown as number)))
-    return { hours: 0, minutes: 0 };
-
-  let minutes = Number(input.at(-1));
-  if (input.at(-2)) {
-    minutes = minutes + Number(input.at(-2)) * 10;
-  }
-
-  let hours = 0;
-  if (input.at(-3)) {
-    hours = Number(input.at(-3));
-  }
-  if (input.at(-4)) {
-    hours = hours + Number(input.at(-4)) * 10;
-  }
-
-  if (hours < 0 || hours > 59 || minutes < 0 || minutes > 59)
-    return { hours: 0, minutes: 0 };
-
-  return { hours, minutes };
 }
 
 export function buildDailyTemps(
@@ -139,12 +109,12 @@ export function buildDailyWorkouts(
     number
   ][] = records.map((record) => [
     record.date,
-    convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!),
-    convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!),
-    convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!),
-    convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!),
-    convertSixtyToTen(record.light.at(0)!, record.light.at(1)!),
-    convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!),
+    convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) / 60,
+    convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) / 60,
+    convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!) / 60,
+    convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!) / 60,
+    convertSixtyToTen(record.light.at(0)!, record.light.at(1)!) / 60,
+    convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!) / 60,
   ]);
   return data;
 }
@@ -202,28 +172,28 @@ export function checkRecordFormDisabled(state: RecordFormState) {
 }
 
 export function buildWorkoutRecord_createRecord(state: RecordFormState) {
-  const wakeup = convertStringToSixty(state.wakeup);
-  const vo2_max = convertStringToSixty(state.vo2_max);
-  const anaerobic = convertStringToSixty(state.anaerobic);
-  const aerobic = convertStringToSixty(state.aerobic);
-  const intensive = convertStringToSixty(state.intensive);
-  const light = convertStringToSixty(state.light);
-  const relax = convertStringToSixty(state.relax);
+  const wakeup = convertTenToSixty(state.wakeup);
+  const vo2_max = convertTenToSixty(state.vo2_max);
+  const anaerobic = convertTenToSixty(state.anaerobic);
+  const aerobic = convertTenToSixty(state.aerobic);
+  const intensive = convertTenToSixty(state.intensive);
+  const light = convertTenToSixty(state.light);
+  const relax = convertTenToSixty(state.relax);
 
   const createdAt = Date.now();
   const recode: WorkoutRecord_createRecord = {
     temperature: state.temperature,
-    wakeup: [wakeup.hours, wakeup.minutes],
+    wakeup: [wakeup.minutes, wakeup.seconds],
     distance: state.distance,
     calories: state.calories,
     bpm_avg: state.bpm_avg,
     bpm_max: state.bpm_max,
-    vo2_max: [vo2_max.hours, vo2_max.minutes],
-    anaerobic: [anaerobic.hours, anaerobic.minutes],
-    aerobic: [aerobic.hours, aerobic.minutes],
-    intensive: [intensive.hours, intensive.minutes],
-    light: [light.hours, light.minutes],
-    relax: [relax.hours, relax.hours],
+    vo2_max: [vo2_max.minutes, vo2_max.seconds],
+    anaerobic: [anaerobic.minutes, anaerobic.seconds],
+    aerobic: [aerobic.minutes, aerobic.seconds],
+    intensive: [intensive.minutes, intensive.seconds],
+    light: [light.minutes, light.seconds],
+    relax: [relax.minutes, relax.seconds],
     date: [state.y, state.m, state.d],
     createdAt,
   };

@@ -27,7 +27,7 @@ const DairyWorkouts = ({ data, label, dataLabel }: Props) => {
         title: label,
         isStacked: true,
         hAxis: { format: 'M/d' },
-        vAxis: { title: '累計時間（秒）' },
+        vAxis: { title: '累計時間（分）' },
       }}
       data={[['日付', ...dataLabel], ...buildDateData(data)]}
     />
