@@ -17,6 +17,30 @@ export function convertTenToSixty(_seconds: number): {
   return { minutes, seconds };
 }
 
+export function parseSixty(input: number): {
+  minutes: number;
+  seconds: number;
+} {
+  let minutes = 0;
+  let seconds = 0;
+
+  if (input.toString().at(-1)) {
+    seconds += Number(input.toString().at(-1));
+  }
+  if (input.toString().at(-2)) {
+    seconds += Number(input.toString().at(-2)) * 10;
+  }
+
+  if (input.toString().at(-3)) {
+    minutes += Number(input.toString().at(-3));
+  }
+  if (input.toString().at(-4)) {
+    minutes += Number(input.toString().at(-4)) * 10;
+  }
+
+  return { minutes, seconds };
+}
+
 export function convertStringToSixtyString(input: number) {
   if (input < 0) return null;
 
@@ -172,13 +196,13 @@ export function checkRecordFormDisabled(state: RecordFormState) {
 }
 
 export function buildWorkoutRecord_createRecord(state: RecordFormState) {
-  const wakeup = convertTenToSixty(state.wakeup);
-  const vo2_max = convertTenToSixty(state.vo2_max);
-  const anaerobic = convertTenToSixty(state.anaerobic);
-  const aerobic = convertTenToSixty(state.aerobic);
-  const intensive = convertTenToSixty(state.intensive);
-  const light = convertTenToSixty(state.light);
-  const relax = convertTenToSixty(state.relax);
+  const wakeup = parseSixty(state.wakeup);
+  const vo2_max = parseSixty(state.vo2_max);
+  const anaerobic = parseSixty(state.anaerobic);
+  const aerobic = parseSixty(state.aerobic);
+  const intensive = parseSixty(state.intensive);
+  const light = parseSixty(state.light);
+  const relax = parseSixty(state.relax);
 
   const createdAt = Date.now();
   const recode: WorkoutRecord_createRecord = {

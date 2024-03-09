@@ -5,6 +5,7 @@ import {
   convertSixtyToTen,
   convertStringToSixtyString,
   convertTenToSixty,
+  parseSixty,
 } from '../services/utils';
 
 type Props = { state: RecordFormState };
@@ -20,7 +21,7 @@ const RecordFormMonitor = ({ state }: Props) => {
       state.light,
       state.relax,
     ].forEach((input: number) => {
-      const { minutes, seconds } = convertTenToSixty(input);
+      const { minutes, seconds } = parseSixty(input);
       const time = convertSixtyToTen(minutes, seconds);
       duration = duration + time;
     });
