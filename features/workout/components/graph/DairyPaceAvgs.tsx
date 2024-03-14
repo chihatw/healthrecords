@@ -15,7 +15,7 @@ const DairyPaceAvgs = ({ label, data }: Props) => {
         title: label,
         curveType: 'function',
         hAxis: { format: 'M/d' },
-        vAxis: { title: '1km毎ペース（分）' },
+        vAxis: { title: '1km毎ペース（分）', direction: -1 },
         legend: { position: 'none' },
       }}
       data={[['日付', label], ...buildDateData(data)]}

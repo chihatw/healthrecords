@@ -17,6 +17,7 @@ const DairyWakeup = ({ label, data }: Props) => {
         curveType: 'function',
         hAxis: { format: 'M/d' },
         legend: { position: 'none' },
+        vAxis: { direction: -1 },
       }}
       data={[['日付', label], ...buildDateData(data)]}
     />
