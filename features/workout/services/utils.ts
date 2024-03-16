@@ -111,6 +111,18 @@ export function buildDailyBpms(
   );
   return date;
 }
+export function buildDailyDpbs(
+  records: WorkoutRecord[]
+): [[number, number, number], number][] {
+  const data: [[number, number, number], number][] = records.map((record) => {
+    const duration = getDuration(record);
+    const pace_avg = duration / 60 / (record.distance / 1000);
+    const pace_avg_per_bpm_avg = (pace_avg / record.bpm_avg) * 100;
+
+    return [record.date, pace_avg_per_bpm_avg];
+  });
+  return data;
+}
 
 export function buildDailyWorkouts(
   records: WorkoutRecord[]
@@ -147,13 +159,7 @@ export function buildDailyDurations(
   records: WorkoutRecord[]
 ): [[number, number, number], number][] {
   const data: [[number, number, number], number][] = records.map((record) => {
-    const duration =
-      convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) +
-      convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) +
-      convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!) +
-      convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!) +
-      convertSixtyToTen(record.light.at(0)!, record.light.at(1)!) +
-      convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!);
+    const duration = getDuration(record);
     return [record.date, duration];
   });
   return data;
@@ -163,13 +169,7 @@ export function buildDailyPaceAvgs(
   records: WorkoutRecord[]
 ): [[number, number, number], number][] {
   const data: [[number, number, number], number][] = records.map((record) => {
-    const duration =
-      convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) +
-      convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) +
-      convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!) +
-      convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!) +
-      convertSixtyToTen(record.light.at(0)!, record.light.at(1)!) +
-      convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!);
+    const duration = getDuration(record);
     return [record.date, duration / 60 / (record.distance / 1000)];
   });
   return data;
@@ -233,4 +233,15 @@ export function buildDateData(array: any[]): any[] {
 
 export function serializeDateArray(array: [number, number, number]): number {
   return array[0] * 1000 + array[1] * 100 + array[2];
+}
+
+function getDuration(record: WorkoutRecord) {
+  const duration =
+    convertSixtyToTen(record.vo2_max.at(0)!, record.vo2_max.at(1)!) +
+    convertSixtyToTen(record.anaerobic.at(0)!, record.anaerobic.at(1)!) +
+    convertSixtyToTen(record.aerobic.at(0)!, record.aerobic.at(1)!) +
+    convertSixtyToTen(record.intensive.at(0)!, record.intensive.at(1)!) +
+    convertSixtyToTen(record.light.at(0)!, record.light.at(1)!) +
+    convertSixtyToTen(record.relax.at(0)!, record.relax.at(1)!);
+  return duration;
 }

@@ -1,6 +1,7 @@
 import DairyBpms from '@/features/workout/components/graph/DairyBpms';
 import DailyCalories from '@/features/workout/components/graph/DairyCalories';
 import DailyDistances from '@/features/workout/components/graph/DairyDistances';
+import DailyDpbs from '@/features/workout/components/graph/DairyDpbs';
 import DailyPaceAvgs from '@/features/workout/components/graph/DairyPaceAvgs';
 import DailyTemperature from '@/features/workout/components/graph/DairyTemperature';
 import DailyWakeup from '@/features/workout/components/graph/DairyWakeup';
@@ -10,6 +11,7 @@ import {
   buildDailyBpms,
   buildDailyCalories,
   buildDailyDistances,
+  buildDailyDpbs,
   buildDailyPaceAvgs,
   buildDailyTemps,
   buildDailyWakeup,
@@ -26,6 +28,9 @@ export default async function Home() {
   const dailyDistances = buildDailyDistances(records);
   const dailyWorkouts = buildDailyWorkouts(records);
   const dailyPaceAvgs = buildDailyPaceAvgs(records);
+  const dailyDpbs = buildDailyDpbs(records);
+
+  console.log({ dailyDpbs });
 
   if (!records.length) return <></>;
 
@@ -43,13 +48,13 @@ export default async function Home() {
           'リラックス',
         ]}
       />
-      {/* <DailyDurations label='運動時間' data={dailyDuraions} /> */}
-      <DailyPaceAvgs label='平均ペース' data={dailyPaceAvgs} />
       <DairyBpms
         data={dailyBpms}
         label='BPM'
         dataLabels={['最大BPM', '平均BPM']}
       />
+      <DailyPaceAvgs label='平均ペース' data={dailyPaceAvgs} />
+      <DailyDpbs label='平均ペース ÷ 平均BPM' data={dailyDpbs} />
       <DailyDistances data={dailyDistances} label='距離' />
       <DailyCalories data={dailyCalories} label='消費カロリー' />
       <DailyWakeup data={dailyWakeups} label='起床時間' />

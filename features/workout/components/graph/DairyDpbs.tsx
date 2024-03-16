@@ -8,7 +8,7 @@ type Props = {
   data: [[number, number, number], number][];
 };
 
-const DairyDurations = ({ label, data }: Props) => {
+const DairyDpbs = ({ label, data }: Props) => {
   return (
     <Chart
       chartType='LineChart'
@@ -16,7 +16,7 @@ const DairyDurations = ({ label, data }: Props) => {
         title: label,
         curveType: 'function',
         hAxis: { format: 'M/d' },
-        vAxis: { title: '累計時間（秒）' },
+        vAxis: { direction: -1, textPosition: 'none' },
         legend: { position: 'none' },
       }}
       data={[['日付', label], ...buildDateData(data)]}
@@ -24,4 +24,4 @@ const DairyDurations = ({ label, data }: Props) => {
   );
 };
 
-export default DairyDurations;
+export default DairyDpbs;
